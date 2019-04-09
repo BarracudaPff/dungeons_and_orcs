@@ -1,7 +1,7 @@
 package com.mygdx.game.screens;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,30 +12,24 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.AppConstants;
-import com.mygdx.game.B2dContactListener;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.controllers.KeyboardController;
-import com.mygdx.game.ecs.components.B2dBodyComponent;
+import com.mygdx.game.ecs.components.Box2DComponent;
 import com.mygdx.game.ecs.components.CollisionComponent;
 import com.mygdx.game.ecs.components.PlayerComponent;
-import com.mygdx.game.ecs.components.StateComponent;
-import com.mygdx.game.ecs.components.TextureComponent;
+import com.mygdx.game.ecs.components.SpriteComponent;
 import com.mygdx.game.ecs.components.TransformComponent;
 import com.mygdx.game.ecs.components.TypeComponent;
-import com.mygdx.game.ecs.systems.AnimationSystem;
 import com.mygdx.game.ecs.systems.CollisionSystem;
-import com.mygdx.game.ecs.systems.PhysicsDebugSystem;
-import com.mygdx.game.ecs.systems.PhysicsSystem;
-import com.mygdx.game.ecs.systems.PlayerControlSystem;
-import com.mygdx.game.ecs.systems.RenderingSystem;
+import com.mygdx.game.ecs.systems.Box2DDebugRendererSystem;
 import com.mygdx.game.units.BodyFactory;
-import com.mygdx.game.units.Player;
+import com.mygdx.game.utils.EntityUtils;
 
 public class GameScreen extends BasicScreen {
-    private OrthographicCamera cam;
+    private OrthographicCamera camera;
     private KeyboardController controller;
     private SpriteBatch sb;
-    private PooledEngine engine;
+    private Engine engine;
     private World world;
     private BodyFactory bodyFactory;
     private Sound ping;
@@ -44,33 +38,21 @@ public class GameScreen extends BasicScreen {
 
     public GameScreen(MyGdxGame game) {
         super(game);
-        controller = new KeyboardController();
-        world = new World(new Vector2(0, -10f), true);
-        world.setContactListener(new B2dContactListener());
-        bodyFactory = BodyFactory.getInstance(world);
 
-        game.assMan.queueAddSounds();
-        game.assMan.manager.finishLoading();
-        atlas = game.assMan.manager.get("images/game.atlas", TextureAtlas.class);
-        ping = game.assMan.manager.get("sounds/ping.wav", Sound.class);
-        boing = game.assMan.manager.get("sounds/boing.wav", Sound.class);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        world = new World(new Vector2(0, 0), false);
 
-        sb = new SpriteBatch();
-        // Create our new rendering system
-        RenderingSystem renderingSystem = new RenderingSystem(sb);
-        cam = renderingSystem.getCamera();
-        sb.setProjectionMatrix(cam.combined);
+        Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1f);
 
         //create a pooled engine
-        engine = new PooledEngine();
+        engine = new Engine();
+
+        // TODO: 09.04.2019 add entity
+        engine.addEntity(EntityUtils.createPlayer());
 
         // add all the relevant systems our engine should run
-        engine.addSystem(new AnimationSystem());
-        engine.addSystem(renderingSystem);
-        engine.addSystem(new PhysicsSystem(world));
-        engine.addSystem(new PhysicsDebugSystem(world, renderingSystem.getCamera()));
+        engine.addSystem(new Box2DDebugRendererSystem());
         engine.addSystem(new CollisionSystem());
-        engine.addSystem(new PlayerControlSystem(controller));
 
         // create some game objects
         createPlayer();
@@ -85,10 +67,10 @@ public class GameScreen extends BasicScreen {
 
     private void createPlatform(float x, float y) {
         Entity entity = engine.createEntity();
-        B2dBodyComponent b2dbody = engine.createComponent(B2dBodyComponent.class);
+        /*Box2DComponent b2dbody = engine.createComponent(Box2DComponent.class);
         b2dbody.body = bodyFactory.makeBoxPolyBody(AppConstants.Material.STONE,
                 BodyDef.BodyType.StaticBody, x, y, 3, 0.2f);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        SpriteComponent texture = engine.createComponent(SpriteComponent.class);
         texture.region = atlas.findRegion("player");
         TypeComponent type = engine.createComponent(TypeComponent.class);
         type.type = TypeComponent.SCENERY;
@@ -96,7 +78,7 @@ public class GameScreen extends BasicScreen {
 
         entity.add(b2dbody);
         entity.add(texture);
-        entity.add(type);
+        entity.add(type);*/
 
         engine.addEntity(entity);
 
@@ -104,9 +86,9 @@ public class GameScreen extends BasicScreen {
 
     private void createFloor() {
         Entity entity = engine.createEntity();
-        B2dBodyComponent b2dbody = engine.createComponent(B2dBodyComponent.class);
+        /*Box2DComponent b2dbody = engine.createComponent(Box2DComponent.class);
         b2dbody.body = bodyFactory.makeBoxPolyBody(AppConstants.Material.STONE, BodyDef.BodyType.StaticBody, 0, 0, 100, 0.2f);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        SpriteComponent texture = engine.createComponent(SpriteComponent.class);
         texture.region = atlas.findRegion("player");
         TypeComponent type = engine.createComponent(TypeComponent.class);
         type.type = TypeComponent.SCENERY;
@@ -116,7 +98,7 @@ public class GameScreen extends BasicScreen {
 
         entity.add(b2dbody);
         entity.add(texture);
-        entity.add(type);
+        entity.add(type);*/
 
         engine.addEntity(entity);
     }
@@ -124,9 +106,9 @@ public class GameScreen extends BasicScreen {
 
     private void createPlayer() {
         Entity entity = engine.createEntity();
-        B2dBodyComponent b2dbody = engine.createComponent(B2dBodyComponent.class);
+        /*Box2DComponent b2dbody = engine.createComponent(Box2DComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        SpriteComponent texture = engine.createComponent(SpriteComponent.class);
         PlayerComponent player = engine.createComponent(PlayerComponent.class);
         CollisionComponent colComp = engine.createComponent(CollisionComponent.class);
         TypeComponent type = engine.createComponent(TypeComponent.class);
@@ -146,7 +128,7 @@ public class GameScreen extends BasicScreen {
         entity.add(player);
         entity.add(colComp);
         entity.add(type);
-        entity.add(stateCom);
+        entity.add(stateCom);*/
 
         engine.addEntity(entity);
 
@@ -159,15 +141,16 @@ public class GameScreen extends BasicScreen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        engine.update(delta);
+        camera.update();
 
+        world.step(delta, 6, 2);
+        engine.update(delta);
     }
 
     @Override
     public void resize(int width, int height) {
-        cam.setToOrtho(false, Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
+        camera.setToOrtho(false, Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
     }
 }
