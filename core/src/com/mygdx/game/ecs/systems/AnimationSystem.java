@@ -6,22 +6,21 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.ecs.components.AnimationComponent;
-import com.mygdx.game.ecs.components.StateComponent;
-import com.mygdx.game.ecs.components.TextureComponent;
+import com.mygdx.game.ecs.components.SpriteComponent;
 
 public class AnimationSystem extends IteratingSystem {
 
-    ComponentMapper<TextureComponent> tm;
+    ComponentMapper<SpriteComponent> tm;
     ComponentMapper<AnimationComponent> am;
     ComponentMapper<StateComponent> sm;
 
     @SuppressWarnings("unchecked")
     public AnimationSystem(){
-        super(Family.all(TextureComponent.class,
+        super(Family.all(SpriteComponent.class,
                 AnimationComponent.class,
                 StateComponent.class).get());
 
-        tm = ComponentMapper.getFor(TextureComponent.class);
+        tm = ComponentMapper.getFor(SpriteComponent.class);
         am = ComponentMapper.getFor(AnimationComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
     }
@@ -33,7 +32,7 @@ public class AnimationSystem extends IteratingSystem {
         StateComponent state = sm.get(entity);
 
         if(ani.animations.containsKey(state.get())){
-            TextureComponent tex = tm.get(entity);
+            SpriteComponent tex = tm.get(entity);
             tex.region = (TextureRegion) ani.animations.get(state.get()).getKeyFrame(state.time, state.isLooping);
         }
 

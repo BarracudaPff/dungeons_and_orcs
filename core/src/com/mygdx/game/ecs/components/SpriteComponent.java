@@ -1,8 +1,9 @@
 package com.mygdx.game.ecs.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class TextureComponent implements Component {
-    public TextureRegion region = null;
+public class SpriteComponent implements Component {
+    public Sprite sprite;
 }

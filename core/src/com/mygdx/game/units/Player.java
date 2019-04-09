@@ -2,37 +2,31 @@ package com.mygdx.game.units;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.AppConstants;
 import com.mygdx.game.ecs.components.AnimationComponent;
-import com.mygdx.game.ecs.components.B2dBodyComponent;
+import com.mygdx.game.ecs.components.Box2DComponent;
 import com.mygdx.game.ecs.components.CollisionComponent;
 import com.mygdx.game.ecs.components.PlayerComponent;
-import com.mygdx.game.ecs.components.StateComponent;
-import com.mygdx.game.ecs.components.TextureComponent;
+import com.mygdx.game.ecs.components.SpriteComponent;
 import com.mygdx.game.ecs.components.TransformComponent;
 import com.mygdx.game.ecs.components.TypeComponent;
-import com.mygdx.game.utils.AshleyUtils;
 
 public class Player extends Entity {
     private AnimationComponent animation;
-    private B2dBodyComponent body;
+    private Box2DComponent body;
     private CollisionComponent collision;
     private PlayerComponent player;
     private StateComponent state;
-    private TextureComponent texture;
+    private SpriteComponent texture;
     private TransformComponent transform;
     private TypeComponent type;
 
     public Player(BodyFactory bodyFactory, TextureAtlas atlas) {
-        B2dBodyComponent b2dbody = new B2dBodyComponent();
+        Box2DComponent b2dbody = new Box2DComponent();
         TransformComponent position = new TransformComponent();
-        TextureComponent texture = new TextureComponent();
+        SpriteComponent texture = new SpriteComponent();
         PlayerComponent player = new PlayerComponent();
         CollisionComponent colComp = new CollisionComponent();
         TypeComponent type = new TypeComponent();
