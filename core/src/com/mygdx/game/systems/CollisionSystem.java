@@ -1,12 +1,12 @@
-package com.mygdx.game.ecs.systems;
+package com.mygdx.game.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.mygdx.game.ecs.components.CollisionComponent;
-import com.mygdx.game.ecs.components.PlayerComponent;
-import com.mygdx.game.ecs.components.TypeComponent;
+import com.mygdx.game.components.CollisionComponent;
+import com.mygdx.game.components.PlayerComponent;
+import com.mygdx.game.components.TypeComponent;
 
 public class CollisionSystem  extends IteratingSystem {
     ComponentMapper<CollisionComponent> cm;

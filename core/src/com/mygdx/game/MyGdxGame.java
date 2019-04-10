@@ -4,6 +4,8 @@ import com.badlogic.gdx.Game;
 import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.screens.LoadingScreen;
 import com.mygdx.game.screens.MenuScreen;
+import com.mygdx.game.utils.AppConstants;
+import com.mygdx.game.utils.B2dAssetManager;
 
 public class MyGdxGame extends Game {
     private LoadingScreen loadingScreen;

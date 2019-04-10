@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mygdx.game.AppConstants;
+import com.mygdx.game.utils.AppConstants;
 import com.mygdx.game.MyGdxGame;
 
 public class LoadingScreen implements Screen {

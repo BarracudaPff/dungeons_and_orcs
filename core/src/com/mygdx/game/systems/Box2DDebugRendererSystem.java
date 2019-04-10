@@ -1,4 +1,4 @@
-package com.mygdx.game.ecs.systems;
+package com.mygdx.game.systems;
 
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;

@@ -9,32 +9,18 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.AppConstants;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.controllers.KeyboardController;
-import com.mygdx.game.ecs.components.Box2DComponent;
-import com.mygdx.game.ecs.components.CollisionComponent;
-import com.mygdx.game.ecs.components.PlayerComponent;
-import com.mygdx.game.ecs.components.SpriteComponent;
-import com.mygdx.game.ecs.components.TransformComponent;
-import com.mygdx.game.ecs.components.TypeComponent;
-import com.mygdx.game.ecs.systems.CollisionSystem;
-import com.mygdx.game.ecs.systems.Box2DDebugRendererSystem;
-import com.mygdx.game.units.BodyFactory;
+import com.mygdx.game.systems.CollisionSystem;
+import com.mygdx.game.systems.Box2DDebugRendererSystem;
+import com.mygdx.game.utils.BodyFactory;
 import com.mygdx.game.utils.EntityUtils;
 
 public class GameScreen extends BasicScreen {
     private OrthographicCamera camera;
-    private KeyboardController controller;
-    private SpriteBatch sb;
     private Engine engine;
     private World world;
-    private BodyFactory bodyFactory;
-    private Sound ping;
-    private Sound boing;
-    private TextureAtlas atlas;
 
     public GameScreen(MyGdxGame game) {
         super(game);
@@ -136,21 +122,17 @@ public class GameScreen extends BasicScreen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(controller);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-
         world.step(delta, 6, 2);
         engine.update(delta);
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.setToOrtho(false, Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
     }
 }

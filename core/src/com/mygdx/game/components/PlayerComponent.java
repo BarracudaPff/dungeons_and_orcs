@@ -1,4 +1,4 @@
-package com.mygdx.game.ecs.components;
+package com.mygdx.game.components;
 
 import com.badlogic.ashley.core.Component;
 
