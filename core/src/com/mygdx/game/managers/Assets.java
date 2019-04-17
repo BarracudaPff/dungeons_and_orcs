@@ -59,7 +59,7 @@ public class Assets {
     }
 
     public void loadMusic() {
-        manager.load(Music.PLAYING, com.badlogic.gdx.audio.Music.class)
+        manager.load(Music.PLAYING, com.badlogic.gdx.audio.Music.class);
     }
 
     public void loadSounds() {
