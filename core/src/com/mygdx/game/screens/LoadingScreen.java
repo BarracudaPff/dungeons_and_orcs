@@ -16,18 +16,18 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.AppConstants;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.managers.Assets;
+
+import static com.mygdx.game.AppConstants.LoadingQueue.END;
+import static com.mygdx.game.AppConstants.LoadingQueue.FONT;
+import static com.mygdx.game.AppConstants.LoadingQueue.MUSIC;
+import static com.mygdx.game.AppConstants.LoadingQueue.PARTICLES;
+import static com.mygdx.game.AppConstants.LoadingQueue.SOUND;
 
 public class LoadingScreen implements Screen {
     private MyGdxGame parent;
-    private TextureAtlas atlas;
     private TextureAtlas.AtlasRegion title;
     private Animation flameAnimation;
-
-    public final int IMAGE = 0;		// loading images
-    public final int FONT = 1;		// loading fonts
-    public final int PARTY = 2;		// loading particle effects
-    public final int SOUND = 3;		// loading sounds
-    public final int MUSIC = 4;		// loading music
 
     private int currentLoadingStage = 0;
 
@@ -35,61 +35,60 @@ public class LoadingScreen implements Screen {
     public float countDown = 0.1f;
     private TextureAtlas.AtlasRegion dash;
     private Stage stage;
-    private Table table;
-    private Image titleImage;
     private TextureAtlas.AtlasRegion copyright;
-    private Image copyrightImage;
     private Table loadingTable;
     private TextureAtlas.AtlasRegion background;
 
 
-    public LoadingScreen(MyGdxGame game){
+    public LoadingScreen(MyGdxGame game) {
         parent = game;
         stage = new Stage(new ScreenViewport());
 
-        loadAssets();
-        // initiate queueing of images but don't start loading
-        parent.assMan.queueAddImages();
+        loadUI();
+
+        Assets.getInstance()
+                .loadTextures();
         System.out.println("Loading images....");
     }
 
-    private void loadAssets() {
+    private void loadUI() {
         // load loading images and wait until finished
-        parent.assMan.queueAddLoadingImages();
-        parent.assMan.manager.finishLoading();
+        Assets.getInstance()
+                .loadSkin();
+        Assets.getInstance()
+                .loadingFinished();
 
         // get images used to display loading progress
-        atlas = parent.assMan.manager.get("images/loading.atlas");
-        title = atlas.findRegion("staying-alight-logo");
-        dash = atlas.findRegion("loading-dash");
-        background = atlas.findRegion("flamebackground");
-        copyright = atlas.findRegion("copyright");
+        TextureAtlas atlas = Assets.getInstance().getAsset(Assets.Atlas.LOADING, TextureAtlas.class);
+        title = atlas.findRegion(Assets.UI.TITLE);
+        dash = atlas.findRegion(Assets.UI.DASH);
+        background = atlas.findRegion(Assets.UI.BACKGROUND);
+        copyright = atlas.findRegion(Assets.UI.COPYRIGHT);
         flameAnimation = new Animation(0.07f, atlas.findRegions("flames/flames"), Animation.PlayMode.LOOP);
-
     }
 
     @Override
     public void show() {
 
-        titleImage = new Image(title);
-        copyrightImage = new Image(copyright);
+        Image titleImage = new Image(title);
+        Image copyrightImage = new Image(copyright);
 
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         table.setDebug(false);
         table.setBackground(new TiledDrawable(background));
 
         loadingTable = new Table();
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
-        loadingTable.add(new LoadingBarPart(dash,flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
+        loadingTable.add(new LoadingBarPart(dash, flameAnimation));
 
 
         table.add(titleImage).align(Align.center).pad(10, 0, 0, 0).colspan(10);
@@ -104,41 +103,45 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (parent.assMan.manager.update()) { // Load some, will return true if done loading
-            currentLoadingStage+= 1;
-            if(currentLoadingStage <= 5){
-                loadingTable.getCells().get((currentLoadingStage-1)*2).getActor().setVisible(true);
-                loadingTable.getCells().get((currentLoadingStage-1)*2+1).getActor().setVisible(true);
+        if (Assets.getInstance().update()) { // Load some, will return true if done loading
+            currentLoadingStage += 1;
+            if (currentLoadingStage <= 5) {
+                loadingTable.getCells().get((currentLoadingStage - 1) * 2).getActor().setVisible(true);
+                loadingTable.getCells().get((currentLoadingStage - 1) * 2 + 1).getActor().setVisible(true);
             }
-            switch(currentLoadingStage){
+            switch (currentLoadingStage) {
                 case FONT:
                     System.out.println("Loading fonts....");
-                    parent.assMan.queueAddFonts();
+                    Assets.getInstance()
+                            .loadFonts();
                     break;
-                case PARTY:
+                case PARTICLES:
                     System.out.println("Loading Particle Effects....");
-                    parent.assMan.queueAddParticleEffects();
+                    Assets.getInstance()
+                            .loadParticles();
                     break;
                 case SOUND:
-                    System.out.println("Loading Sounds....");
-                    parent.assMan.queueAddSounds();
+                    System.out.println("Loading Sound....");
+                    Assets.getInstance()
+                            .loadSounds();
                     break;
                 case MUSIC:
-                    System.out.println("Loading fonts....");
-                    parent.assMan.queueAddMusic();
+                    System.out.println("Loading music....");
+                    Assets.getInstance()
+                            .loadMusic();
                     break;
-                case 5:
+                case END:
                     System.out.println("Finished");
                     break;
             }
-            if (currentLoadingStage >5){
+            if (currentLoadingStage > 5) {
                 countDown -= delta;
                 currentLoadingStage = 5;
-                if(countDown < 0){
+                if (countDown < 0) {
                     parent.changeScreen(AppConstants.MENU);
                 }
             }
@@ -150,7 +153,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height,true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -172,7 +175,7 @@ public class LoadingScreen implements Screen {
 
     class LoadingBarPart extends Actor {
 
-        private TextureAtlas.AtlasRegion image = dash;
+        private TextureAtlas.AtlasRegion image;
         private Animation flameAnimation;
         private float stateTime = 0f;
         private TextureRegion currentFrame;
@@ -185,15 +188,14 @@ public class LoadingScreen implements Screen {
             this.setWidth(30);
             this.setHeight(25);
             this.setVisible(false);
-            //this.debug();
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
             super.draw(batch, parentAlpha);
-            batch.draw(image, getX(),getY(), 30, 30);
+            batch.draw(image, getX(), getY(), 30, 30);
             batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-            batch.draw(currentFrame, getX()-5,getY(), 40, 40);
+            batch.draw(currentFrame, getX() - 5, getY(), 40, 40);
             batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         }

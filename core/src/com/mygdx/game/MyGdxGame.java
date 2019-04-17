@@ -9,7 +9,6 @@ public class MyGdxGame extends Game {
     private LoadingScreen loadingScreen;
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
-    public B2dAssetManager assMan = new B2dAssetManager();
 
     @Override
     public void create() {

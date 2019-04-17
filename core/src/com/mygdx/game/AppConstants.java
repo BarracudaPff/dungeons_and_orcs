@@ -30,4 +30,14 @@ public class AppConstants {
     public static enum Shape {
         SQUARE, CIRCLE, PEGAGON, ARROW
     }
+
+    public class LoadingQueue {
+        public static final int IMAGE = 0;        // loading images
+        public static final int FONT = 1;        // loading fonts
+        public static final int PARTICLES = 2;        // loading particle effects
+        public static final int SOUND = 3;        // loading sounds
+        public static final int MUSIC = 4;        // loading music
+        public static final int END = 5;        // loading music
+
+    }
 }
