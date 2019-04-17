@@ -14,5 +14,11 @@ A libgdx game using the entity-component-system ashley
 ### [DropTheCube-LD32](https://github.com/Portals/DropTheCube-LD32)
 Made for Ludumdare 32!
 
+### [LSD](https://github.com/basimkhajwal/LSD)
+A Java + libGDX port of a great game, Little Sticky Destroyer, which was written in Lua + Love2d
+
+### [Libgdx tutorial game `withour Ashley`](https://github.com/vladimirslav/dodginghero)
+A Java + libGDX port of a great game, Little Sticky Destroyer, which was written in Lua + Love2d
+
 ### [Samples from libgdx](https://github.com/libgdx/libgdx/tree/master/tests/gdx-tests/src/com/badlogic/gdx/tests)
 Examples
