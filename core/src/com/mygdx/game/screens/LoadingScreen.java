@@ -54,7 +54,7 @@ public class LoadingScreen implements Screen {
     private void loadUI() {
         // load loading images and wait until finished
         Assets.getInstance()
-                .loadSkin();
+                .loadTextures();
         Assets.getInstance()
                 .loadingFinished();
 

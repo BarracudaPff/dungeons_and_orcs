@@ -2,8 +2,10 @@ package com.mygdx.game.managers;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
@@ -11,7 +13,7 @@ public class Assets {
     private static Assets instance;
 
     public static class Atlas {
-        public static final String DESERT = "atlas/game.atlas";
+        public static final String DESERT = "atlas/desert.tmx";
         public static final String LOADING = "images/loading.atlas";
         public static final String UI = "images/loading.atlas";
     }
@@ -48,14 +50,16 @@ public class Assets {
     }
 
     public void loadTextures() {
+        manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         manager.load(Atlas.DESERT, TiledMap.class);
         manager.load(Atlas.LOADING, TextureAtlas.class);
     }
 
     public void loadSkin() {
+        SkinLoader.SkinParameter params = new SkinLoader.SkinParameter(Atlas.UI);
         manager.load(UI.SKIN,
                 Skin.class,
-                new SkinLoader.SkinParameter(Atlas.UI));
+                params);
     }
 
     public void loadMusic() {
